@@ -5,10 +5,10 @@ export type ContactDocument = HydratedDocument<Contact>;
 
 @Schema()
 export class Contact {
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop({ unique: true })
+  @Prop({ unique: true, required: true })
   phone: string;
 
   @Prop()
