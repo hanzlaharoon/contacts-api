@@ -18,6 +18,5 @@ export class CreateContactDto {
 
   @IsString()
   @IsOptional()
-  @Length(3, 255)
   description: string;
 }

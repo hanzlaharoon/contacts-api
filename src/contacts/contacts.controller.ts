@@ -8,31 +8,42 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ContactsService } from './contacts.service';
-import { CreateContactDto } from './dto/create-contact.dto';
-import { UpdateContactDto } from './dto/update-contact.dto';
+import { CreateContactDto } from './dtos/create-contact.dto';
+import { UpdateContactDto } from './dtos/update-contact.dto';
+import { Contact } from './dtos/contact.dto';
+import { entityToDto, entityToDtoArray } from 'src/utils';
 
 @Controller('contacts')
 export class ContactsController {
   constructor(private readonly contactsService: ContactsService) {}
 
   @Post()
-  create(@Body() createContactDto: CreateContactDto) {
-    return this.contactsService.create(createContactDto);
+  async create(@Body() createContactDto: CreateContactDto): Promise<Contact> {
+    return entityToDto(
+      Contact,
+      await this.contactsService.create(createContactDto),
+    );
   }
 
   @Get()
-  findAll() {
-    return this.contactsService.findAll();
+  async findAll(): Promise<Contact[]> {
+    return entityToDtoArray(Contact, await this.contactsService.findAll());
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contactsService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<Contact> {
+    return entityToDto(Contact, await this.contactsService.findOne(id));
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateContactDto: UpdateContactDto) {
-    return this.contactsService.update(id, updateContactDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateContactDto: UpdateContactDto,
+  ): Promise<Contact> {
+    return entityToDto(
+      Contact,
+      await this.contactsService.update(id, updateContactDto),
+    );
   }
 
   @Delete(':id')
